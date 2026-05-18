@@ -1,4 +1,4 @@
-# Room Service (Сервис аудиторий)
+# Вариант №17. Room Service (Сервис аудиторий)
 
 ## Функции сервиса
 1. Создание типа аудитории.
@@ -12,18 +12,31 @@
 ## ER‑диаграмма
 
 **Сущности:**
-* **Rooms (Аудитории)**
-  * `id` (PK)
-  * `room_number`
-  * `floor`
-  * `building`
-  * `capacity`
-* **RoomTypes (Типы аудиторий)**
-  * `id` (PK)
-  * `type_name`
-* **RoomRoomType (Связь аудиторий и типов)**
-  * `room_id` (FK → Rooms.id)
-  * `room_type_id` (FK → RoomTypes.id)
+
+### Таблица `Rooms` (Аудитории)
+
+| Колонка | Тип данных | Ограничения |
+|-------|----------|-----------|
+| `id` | `INT` или `SERIAL` | **PRIMARY KEY** |
+| `room_number` | `VARCHAR(n)` |  |
+| `floor` | `INT` |  |
+| `building` | `VARCHAR(n)` |  |
+| `capacity` | `INT` |  |
+
+### Таблица `RoomTypes` (Типы аудиторий)
+
+| Колонка | Тип данных | Ограничения |
+|-------|----------|-----------|
+| `id` | `INT` или `SERIAL` | **PRIMARY KEY** |
+| `type_name` | `VARCHAR(n)` |  |
+
+### Таблица `RoomRoomType` (Связь аудиторий и типов)
+
+| Колонка | Тип данных | Ограничения |
+|-------|----------|-----------|
+| `room_id` | `INT` | **FOREIGN KEY** → `Rooms.id` |
+| `room_type_id` | `INT` | **FOREIGN KEY** → `RoomTypes.id` |
+
 
 ## Требования к API
 
