@@ -18,9 +18,9 @@
 | Колонка | Тип данных | Ограничения |
 |-------|----------|-----------|
 | `id` | `INT` или `SERIAL` | **PRIMARY KEY** |
-| `room_number` | `VARCHAR(n)` |  |
+| `room_number` | `VARCHAR(20)` |  |
 | `floor` | `INT` |  |
-| `building` | `VARCHAR(n)` |  |
+| `building` | `VARCHAR(50)` |  |
 | `capacity` | `INT` |  |
 
 ### Таблица `RoomTypes` (Типы аудиторий)
@@ -28,7 +28,7 @@
 | Колонка | Тип данных | Ограничения |
 |-------|----------|-----------|
 | `id` | `INT` или `SERIAL` | **PRIMARY KEY** |
-| `type_name` | `VARCHAR(n)` |  |
+| `type_name` | `VARCHAR(50)` |  |
 
 ### Таблица `RoomRoomType` (Связь аудиторий и типов)
 
