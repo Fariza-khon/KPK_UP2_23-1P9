@@ -34,11 +34,15 @@ class Room(BaseModel):
         null=False,
         constraints=[Check('capacity > 0')]
     )
+    is_active = BooleanField(
+        null=False,
+        default=True
+    )
 
     class Meta:
         table_name = 'rooms'
         indexes = (
-            (('room_number', 'building', 'floor'), True),  # Составной уникальный индекс
+            (('room_number', 'building'), True),  # Составной уникальный индекс по room_number и building
         )
 
 class RoomRoomType(BaseModel):
@@ -61,8 +65,8 @@ class RoomRoomType(BaseModel):
         table_name = 'room_room_type'
         primary_key = CompositeKey('room', 'room_type')  # Составной первичный ключ
         indexes = (
-            ('room_id',),
-            ('room_type_id',)
+            ('room',),        # Индекс по полю room
+            ('room_type',)    # Индекс по полю room_type
         )
 
 def init_db():
