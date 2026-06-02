@@ -7,6 +7,7 @@ class BaseModel(Model):
         database = db
 
 class RoomType(BaseModel):
+    id = AutoField(primary_key=True)  # Явное указание автоинкремента (SERIAL)
     type_name = CharField(
         max_length=50,
         null=False,
@@ -18,6 +19,7 @@ class RoomType(BaseModel):
         table_name = 'room_types'
 
 class Room(BaseModel):
+    id = AutoField(primary_key=True)  # Явное указание автоинкремента (SERIAL)
     room_number = CharField(
         max_length=20,
         null=False
@@ -41,9 +43,7 @@ class Room(BaseModel):
 
     class Meta:
         table_name = 'rooms'
-        indexes = (
-            (('room_number', 'building'), True),  # Составной уникальный индекс по room_number и building
-        )
+        constraints = [SQL('UNIQUE(room_number, building)')]  # Явное UNIQUE ограничение
 
 class RoomRoomType(BaseModel):
     room = ForeignKeyField(
@@ -51,22 +51,25 @@ class RoomRoomType(BaseModel):
         field='id',
         backref='types',
         on_delete='CASCADE',
-        null=False
+        null=False,
+        column_name='room_id'  # Явное имя столбца
     )
     room_type = ForeignKeyField(
         RoomType,
         field='id',
         backref='rooms',
         on_delete='CASCADE',
-        null=False
+        null=False,
+        column_name='room_type_id'  # Явное имя столбца
     )
 
     class Meta:
         table_name = 'room_room_type'
-        primary_key = CompositeKey('room', 'room_type')  # Составной первичный ключ
+        primary_key = CompositeKey('room', 'room_type')
         indexes = (
-            ('room',),        # Индекс по полю room
-            ('room_type',)    # Индекс по полю room_type
+            # Индексы с явными именами
+            Index('idx_room_id', 'room'),
+            Index('idx_room_type_id', 'room_type'),
         )
 
 def init_db():
