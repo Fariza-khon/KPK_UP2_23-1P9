@@ -123,7 +123,6 @@
 | is_active | Статус активности | boolean |
 | types | Типы аудитории | array of RoomTypeResponse |
 
----
 
 ## 7. Изменение аудитории по ID (change)
 
@@ -134,9 +133,7 @@
 | room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с building | - |
 | floor | Новый этаж | No | int | ≥ 1 | - |
 | building | Новый корпус
-
 ---
-
 ## ER‑диаграмма (Mermaid)
 
 ```mermaid
@@ -150,9 +147,9 @@ erDiagram
     ROOM {
         int id PK
         string room_number
-        int floor { CHECK: >= 1 }
+        int floor
         string building
-        int capacity { CHECK: > 0 }
+        int capacity
         boolean is_active
     }
     
@@ -161,9 +158,14 @@ erDiagram
     }
 
     ROOM_ROOM_TYPE {
-        int room_id FK
-        int type_id FK
+        int room_id PK, FK
+        int type_id PK, FK
     }
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
     ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+
+    NOTE RIGHT OF ROOM
+        floor >= 1
+        capacity > 0
+    END NOTE
