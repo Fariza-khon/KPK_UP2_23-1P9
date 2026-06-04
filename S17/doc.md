@@ -82,7 +82,7 @@
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|----------------------------|-----------|---------|----------------------|----------|
 | type_name | Частичное совпадение названия | No | str | - | - |
-| limit | Лимит количества возвращаемых записей | No | int | ≤ 100 | 10 |
+| limit | Лимит количества возвращаемых записей | No | int | 1 ≤ limit ≤ 100| 10 |
 
 ### Information after successful search
 
