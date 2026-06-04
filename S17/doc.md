@@ -141,39 +141,31 @@
 
 ```mermaid
 erDiagram
-    ROOM_TYPE {
-        int id PK
-        string type_name
-        boolean is_active
-    }
+ROOM_TYPE {
+int id PK
+string type_name
+boolean is_active
+}
 
-    ROOM {
-        int id PK
-        string room_number
-        string building
-        int floor
-        int capacity
-        boolean is_active
-    }
-    
-    { ROOM } {
-        UNIQUE (room_number, building)
-    }
+ROOM {
+int id PK
+string room_number
+string building
+int floor
+int capacity
+boolean is_active
+}
 
-    ROOM_ROOM_TYPE {
-        int room_id PK, FK
-        int type_id PK, FK
-    }
+{ ROOM } {
+UNIQUE (room_number, building)
+}
 
-    ROOM ||--o{ ROOM_ROOM_TYPE : id .. room_id
-    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id .. type_id
+ROOM_ROOM_TYPE {
+int room_id PK, FK
+int type_id PK, FK
+}
 
-    NOTE RIGHT OF ROOM
-        // Связь многие-ко-многим между ROOM и ROOM_TYPE
-        // Поле types в API формируется как агрегация связанных записей
-        floor >= 1
-        capacity > 0
-    END NOTE
+ROOM ||--o{ ROOM_ROOM_TYPE : id .. room_id
+ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id .. type_id
 
-
-
+  
