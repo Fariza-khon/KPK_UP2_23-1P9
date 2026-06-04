@@ -1,5 +1,6 @@
 from peewee import *
 from typing import List
+from playhouse.fields import ManyToManyField
 
 db = SqliteDatabase('room_service.db')
 
@@ -10,10 +11,10 @@ class BaseModel(Model):
 class RoomType(BaseModel):
     type_name = CharField(max_length=50, null=False, unique=True)
     is_active = BooleanField(null=False, default=True)
-
+    
     class Meta:
         table_name = 'room_types'
-
+        
     def to_dict(self):
         return {
             'id': self.id,
@@ -27,24 +28,12 @@ class Room(BaseModel):
     building = CharField(max_length=50, null=False)
     capacity = IntegerField(constraints=[Check('capacity > 0')], null=False)
     is_active = BooleanField(null=False, default=True)
-
+    room_types = ManyToManyField(RoomType, backref='rooms', through='RoomRoomType')
+    
     class Meta:
         table_name = 'rooms'
         constraints = [SQL('UNIQUE(room_number, building)')]
-
-    def get_types(self):
-        """Получить все типы аудитории в виде списка RoomTypeResponse"""
-        return [rt.room_type.to_dict() for rt in self.room_types_link]
-
-    def set_types(self, type_ids: List[int]):
-        """Установить типы аудитории по списку ID"""
-        # Удаляем старые связи
-        RoomRoomType.delete().where(RoomRoomType.room == self).execute()
-        # Добавляем новые связи
-        for type_id in type_ids:
-            RoomType.get_or_none(RoomType.id == type_id)
-            RoomRoomType.create(room=self, room_type_id=type_id)
-
+        
     def to_dict(self):
         return {
             'id': self.id,
@@ -52,3 +41,34 @@ class Room(BaseModel):
             'floor': self.floor,
             'building': self.building,
             'capacity': self.capacity,
+            'is_active': self.is_active,
+            'types': [rt.room_type.to_dict() for rt in self.room_types.through.select()]
+        }
+
+class RoomRoomType(BaseModel):
+    room = ForeignKeyField(Room, backref='room_types_link')
+    room_type = ForeignKeyField(RoomType, backref='rooms_link')
+    
+    class Meta:
+        table_name = 'room_room_type'
+        indexes = (
+            (('room', 'room_type'), True),
+        )
+
+# Обновленные методы работы с типами
+def set_room_types(self, type_ids: List[int]):
+    # Очищаем существующие связи
+    self.room_types.through.filter(room=self).delete()
+    
+    # Добавляем новые связи
+    for type_id in type_ids:
+        room_type = RoomType.get_or_none(RoomType.id == type_id)
+        if room_type:
+            RoomRoomType.create(room=self, room_type=room_type)
+
+def get_room_types(self):
+    return [rt.room_type.to_dict() for rt in self.room_types.through.select()]
+
+# Добавляем методы в класс Room
+Room.set_room_types = set_room_types
+Room.get_room_types = get_room_types
