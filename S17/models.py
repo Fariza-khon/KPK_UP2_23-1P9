@@ -23,7 +23,7 @@ class RoomType(BaseModel):
         }
 
 class Room(BaseModel):
-    room_number = CharField(max_length=20, null=False)
+    room_number = CharField(null=False)  # Убрали max_length
     floor = IntegerField(constraints=[Check('floor >= 1')], null=False)
     building = CharField(max_length=50, null=False)
     capacity = IntegerField(constraints=[Check('capacity > 0')], null=False)
@@ -46,29 +46,20 @@ class Room(BaseModel):
         }
 
 class RoomRoomType(BaseModel):
-    room = ForeignKeyField(Room, backref='room_types_link')
-    room_type = ForeignKeyField(RoomType, backref='rooms_link')
+    room_id = ForeignKeyField(Room, backref='room_types_link', field='id', on_delete='CASCADE')
+    type_id = ForeignKeyField(RoomType, backref='rooms_link', field='id', on_delete='CASCADE')
     
     class Meta:
         table_name = 'room_room_type'
+        primary_key = CompositeKey('room_id', 'type_id')
         indexes = (
-            (('room', 'room_type'), True),
+            (('room_id', 'type_id'), True),
         )
 
-# Обновленные методы работы с типами
-def set_room_types(self, type_ids: List[int]):
-    # Очищаем существующие связи
-    self.room_types.through.filter(room=self).delete()
-    
-    # Добавляем новые связи
-    for type_id in type_ids:
-        room_type = RoomType.get_or_none(RoomType.id == type_id)
-        if room_type:
-            RoomRoomType.create(room=self, room_type=room_type)
+def init_db():
+    db.connect()
+    db.create_tables([RoomType, Room, RoomRoomType])
+    db.close()
 
-def get_room_types(self):
-    return [rt.room_type.to_dict() for rt in self.room_types.through.select()]
-
-# Добавляем методы в класс Room
-Room.set_room_types = set_room_types
-Room.get_room_types = get_room_types
+if __name__ == "__main__":
+    init_db()
