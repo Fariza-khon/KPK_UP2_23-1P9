@@ -152,20 +152,11 @@ erDiagram
         int capacity
         boolean is_active
     }
-    
-    { ROOM } {
-        UNIQUE (room_number, building)
-    }
 
     ROOM_ROOM_TYPE {
-        int room_id PK, FK
-        int type_id PK, FK
+        int room_id FK
+        int type_id FK
     }
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
     ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
-
-    NOTE RIGHT OF ROOM
-        floor >= 1
-        capacity > 0
-    END NOTE
