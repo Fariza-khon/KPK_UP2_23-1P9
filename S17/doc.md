@@ -81,10 +81,10 @@
 
 ### Search parameters
 
-| Parameter | Description | Type |
-|-----------|----------------------------|---------|
-| type_name | Частичное совпадение названия | str |
-| limit | Лимит количества записей (ограничение на количество возвращаемых записей) | int |
+| Parameter | Description | Required | Type | Default |
+|-----------|----------------------------|-----------|---------|----------|
+| type_name | Частичное совпадение названия | No | str | - |
+| limit | Лимит количества записей | No | int | 10 (максимум 100) |
 
 ### Information after successful search
 
@@ -127,65 +127,36 @@
 
 ## 7. Изменение аудитории по ID (change)
 
-### Параметры для изменения
+### Parameters for change
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
 | room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с building | - |
 | floor | Новый этаж | No | int | ≥ 1 | - |
-| building | Новый корпус | No | str | Если указан, комбинация (room_number, building) должна быть уникальной | - |
-| capacity | Новая вместимость | No | int | > 0 | - |
-| type_ids | Новые ID типов | No | array of int | - | - |
-| is_active | Новый статус активности | No | boolean | - | - |
-
-### Информация после успешного изменения
-
-| Parameter | Type |
-|-----------|---------|
-| id | int |
-| room_number | str |
-| floor | int |
-| building | str |
-| capacity | int |
-| is_active | boolean |
-| types | array of RoomTypeResponse |
-
----
-
-## 5. Получение списка типов аудитории (get list)
-
-### Search parameters
-
-| Parameter | Description | Type | Default |
-|-----------|----------------------------|---------|----------|
-| type_name | Частичное совпадение названия | str | - |
-| limit | Лимит количества записей | int | 10 (максимум 100) |
-
----
-
+| building | Новый корпус | No | str | Если указан, комбинация (room_number,
 ## ER‑диаграмма (Mermaid)
 
 ```mermaid
 erDiagram
-    ROOM_TYPE {
-        int id PK
-        string type_name
-        boolean is_active
-    }
+ROOM_TYPE {
+int id PK
+string type_name
+boolean is_active
+}
 
-    ROOM {
-        int id PK
-        string room_number
-        int floor
-        string building
-        int capacity
-        boolean is_active
-    }
+ROOM {
+int id PK
+string room_number
+int floor
+string building
+int capacity
+boolean is_active
+}
 
-    ROOM_ROOM_TYPE {
-        int room_id PK, FK
-        int type_id PK, FK
-    }
+ROOM_ROOM_TYPE {
+int room_id PK, FK
+int type_id PK, FK
+}
 
-    ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
-    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
+ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
