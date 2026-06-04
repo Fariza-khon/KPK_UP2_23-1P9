@@ -176,8 +176,8 @@ erDiagram
         int type_id FK 
     }
 
-    ROOM ||--o{ ROOM_ROOM_TYPE : "room_id → idroom_id"
-    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : "type_id → type_id"
+    ROOM ||--o{ ROOM_ROOM_TYPE : "room_id → id"
+    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : "type_id → id"
 
 
   
