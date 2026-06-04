@@ -38,31 +38,6 @@
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-----------|-----------|---------|-----------|-----------|
-| room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с `building` | — |
-| floor | Новый этаж | No | int | ≥ 1 | — |
-| building | Новый корпус | No | str | Если указан `room_number`, комбинация `(room_number, building)` должна быть уникальной | — |
-| capacity | Новая вместимость | No | int | > 0 | — |
-| type_ids | Новый список ID типов аудитории | No | array of int | — | `[]` |
-| is_active | Новый статус активности | No | boolean | — | — |
-
-### Information after successful change
-
-| Parameter | Description | Type |
-|-----------|-----------|---------|
-| id | ID аудитории | int |
-| room_number | Номер аудитории | str |
-| floor | Этаж | int |
-| building | Корпус | str |
-| capacity | Вместимость | int |
-| is_active | Статус активности | boolean |
-| types | Типы аудитории | array of RoomTypeResponse |
-
-## 2. Изменение типа аудитории по ID (change)
-
-### Parameters for change
-
-| Parameter | Description | Required | Type | Constraint | Default |
-|-----------|-----------|-----------|---------|-----------|-----------|
 | type_name | Новое название типа аудитории | No | str | Уникальное значение, min length 1, max length 50 | — |
 
 ### Information after successful change
@@ -125,7 +100,7 @@
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
-| room_number | Номер аудитории | Yes | str | - | Уникальное значение в комбинации с building |
+| room_number | Номер аудитории | Yes | str | Уникальное значение в комбинации с building | - |
 | floor | Этаж | Yes | int | ≥ 1 | - |
 | building | Корпус | Yes | str | - | - |
 | capacity | Вместимость | Yes | int | > 0 | - |
@@ -197,8 +172,8 @@ erDiagram
     }
 
     ROOM_ROOM_TYPE {
-        int room_id PK, FK
-        int type_id PK, FK
+        int room_id PK "Первичный ключ, внешний ключ к ROOM(id)"
+        int type_id PK "Первичный ключ, внешний ключ к ROOM_TYPE(id)"
     }
 
     ROOM ||--o{ ROOM_ROOM_TYPE : "id → room_id"
