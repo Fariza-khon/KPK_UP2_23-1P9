@@ -23,7 +23,7 @@ class RoomType(BaseModel):
         }
 
 class Room(BaseModel):
-    room_number = CharField(null=False)  # Убрали max_length
+    room_number = CharField(null=False)
     floor = IntegerField(constraints=[Check('floor >= 1')], null=False)
     building = CharField(max_length=50, null=False)
     capacity = IntegerField(constraints=[Check('capacity > 0')], null=False)
@@ -41,8 +41,7 @@ class Room(BaseModel):
             'floor': self.floor,
             'building': self.building,
             'capacity': self.capacity,
-            'is_active': self.is_active,
-            'types': [rt.room_type.to_dict() for rt in self.room_types.through.select()]
+            'is_active': self.is_active
         }
 
 class RoomRoomType(BaseModel):
