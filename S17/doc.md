@@ -102,9 +102,9 @@
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
 | room_number | Номер аудитории | Yes | str | Уникальное значение в комбинации с building | - |
 | floor | Этаж | Yes | int | ≥ 1 | - |
-| building | Корпус | Yes | str | - | - |
+| building | Корпус | Yes | str |Если указан room_number, комбинация (room_number, building) должна быть уникальной| - |
 | capacity | Вместимость | Yes | int | > 0 | - |
-| type_ids | Список ID типов | No | array of int | - | [] |
+| type_ids | Список ID типов | No | array of int |Все ID должны существовать в таблице ROOM_TYPE| [] |
 | is_active | Статус активности | No | boolean | - | True |
 
 **Unique combination:** `(room_number, building)` — должна быть уникальной.
@@ -134,7 +134,7 @@
 | floor | Новый этаж | No | int | ≥ 1 | — |
 | building | Новый корпус | No | str | Если указан `room_number`, комбинация `(room_number, building)` должна быть уникальной | — |
 | capacity | Новая вместимость | No | int | > 0 | — |
-| type_ids | Новый список ID типов аудитории | No | array of int | — | `[]` |
+| type_ids | Новый список ID типов аудитории | No | array of int |Все ID должны существовать в таблице ROOM_TYPE| `[]` |
 | is_active | Новый статус активности | No | boolean | — | — |
 
 ### Information after successful change
@@ -159,7 +159,7 @@ erDiagram
     ROOM_TYPE {
         int id PK
         string type_name
-        boolean is_active
+        boolean is_active "default: true"
     }
 
     ROOM {
@@ -168,7 +168,7 @@ erDiagram
         string building
         int floor
         int capacity
-        boolean is_active
+        boolean is_active "default: true"
     }
 
     ROOM_ROOM_TYPE {
