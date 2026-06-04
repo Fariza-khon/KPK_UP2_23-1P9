@@ -165,8 +165,8 @@ erDiagram
         int type_id PK, FK
     }
 
-    ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
-    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+    ROOM ||--o{ ROOM_ROOM_TYPE : id .. room_id
+    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id .. type_id
 
     NOTE RIGHT OF ROOM
         // Связь многие-ко-многим между ROOM и ROOM_TYPE
@@ -174,5 +174,6 @@ erDiagram
         floor >= 1
         capacity > 0
     END NOTE
+
 
 
