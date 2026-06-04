@@ -1,4 +1,5 @@
 from peewee import *
+from typing import List
 
 db = SqliteDatabase('room_service.db')
 
@@ -22,9 +23,9 @@ class RoomType(BaseModel):
 
 class Room(BaseModel):
     room_number = CharField(max_length=20, null=False)
-    floor = IntegerField(null=False)
+    floor = IntegerField(constraints=[Check('floor >= 1')], null=False)
     building = CharField(max_length=50, null=False)
-    capacity = IntegerField(null=False)
+    capacity = IntegerField(constraints=[Check('capacity > 0')], null=False)
     is_active = BooleanField(null=False, default=True)
 
     class Meta:
@@ -35,7 +36,7 @@ class Room(BaseModel):
         """Получить все типы аудитории в виде списка RoomTypeResponse"""
         return [rt.room_type.to_dict() for rt in self.room_types_link]
 
-    def set_types(self, type_ids):
+    def set_types(self, type_ids: List[int]):
         """Установить типы аудитории по списку ID"""
         # Удаляем старые связи
         RoomRoomType.delete().where(RoomRoomType.room == self).execute()
@@ -51,18 +52,3 @@ class Room(BaseModel):
             'floor': self.floor,
             'building': self.building,
             'capacity': self.capacity,
-            'is_active': self.is_active,
-            'types': self.get_types()
-        }
-
-class RoomRoomType(BaseModel):
-    room = ForeignKeyField(Room, backref='room_types_link', on_delete='CASCADE', null=False)
-    room_type = ForeignKeyField(RoomType, backref='rooms_link', on_delete='CASCADE', null=False)
-
-    class Meta:
-        table_name = 'room_room_type'
-        primary_key = CompositeKey('room', 'room_type')
-
-def init_db():
-    db.connect()
-    db.create_tables([RoomType, Room, RoomRoomType], safe=True)
