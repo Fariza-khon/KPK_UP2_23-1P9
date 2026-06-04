@@ -180,7 +180,3 @@ erDiagram
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
     ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
-
-ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
-ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
-
