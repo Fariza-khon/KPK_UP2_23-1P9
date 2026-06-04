@@ -60,7 +60,7 @@
 |---------|
 | boolean |
 
-* **True** — тип аудитории успешно помечен как удалённый
+* **True** — тип аудитории успешно помечен как удалённый (is_active = False)
 * **False** — запись не найдена или произошла ошибка
 
 ---
@@ -158,30 +158,28 @@
 
 ```mermaid
 erDiagram
-ROOM_TYPE {
-int id PK
-string type_name
-boolean is_active
-}
+    ROOM_TYPE {
+        int id PK
+        string type_name
+        boolean is_active
+    }
 
-ROOM {
-int id PK
-string room_number
-int floor
-string building
-int capacity
-boolean is_active
-}
+    ROOM {
+        int id PK
+        string room_number
+        int floor
+        string building
+        int capacity
+        boolean is_active
+    }
 
-ROOM_ROOM_TYPE {
-int room_id FK
-int type_id FK
-}
-    
-composite PK ROOM_ROOM_TYPE {
-room_id
-type_id
-}
+    ROOM_ROOM_TYPE {
+        int room_id PK, FK
+        int type_id PK, FK
+    }
+
+    ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
+    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
 
 ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
 ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
