@@ -166,19 +166,30 @@ erDiagram
     ROOM {
         int id PK
         string room_number
-        int floor
         string building
+        int floor
         int capacity
         boolean is_active
     }
+    
+    { ROOM } {
+        UNIQUE (room_number, building)
+    }
 
     ROOM_ROOM_TYPE {
-        int room_id FK
-        int type_id FK
+        int room_id PK, FK
+        int type_id PK, FK
     }
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
     ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+
+    NOTE RIGHT OF ROOM
+        // Описание формирования связи
+        Связь с типами аудитории осуществляется через таблицу ROOM_ROOM_TYPE
+        Поле types в API формируется как агрегация связанных записей
+    END NOTE
+
 
 
 
