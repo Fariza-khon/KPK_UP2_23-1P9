@@ -132,7 +132,23 @@
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
 | room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с building | - |
 | floor | Новый этаж | No | int | ≥ 1 | - |
-| building | Новый корпус
+| building | Новый корпус | No | str | Если указан, комбинация (room_number, building) должна быть уникальной | - |
+| capacity | Новая вместимость | No | int | > 0 | - |
+| type_ids | Новые ID типов | No | array of int | - | - |
+| is_active | Новый статус активности | No | boolean | - | - |
+
+### Information after successful change
+
+| Parameter | Type |
+|-----------|---------|
+| id | int |
+| room_number | str |
+| floor | int |
+| building | str |
+| capacity | int |
+| is_active | boolean |
+| types | array of RoomTypeResponse |
+
 ---
 ## ER‑диаграмма (Mermaid)
 
