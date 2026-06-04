@@ -174,8 +174,8 @@ erDiagram
     }
 
     ROOM_ROOM_TYPE {
-        int room_id PK, FK
-        int type_id PK, FK
+        int room_id FK
+        int type_id FK
     }
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
