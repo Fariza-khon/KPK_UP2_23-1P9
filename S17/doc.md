@@ -81,10 +81,10 @@
 
 ### Search parameters
 
-| Parameter | Description | Required | Type | Default |
-|-----------|----------------------------|-----------|---------|----------|
-| type_name | Частичное совпадение названия | No | str | - |
-| limit | Лимит количества записей | No | int | 10 (максимум 100) |
+| Parameter | Description | Required | Type | Constraint | Default |
+|-----------|----------------------------|-----------|---------|----------------------|----------|
+| type_name | Частичное совпадение названия | No | str | - | - |
+| limit | Лимит количества записей | No | int | ≤ 100 | 10 |
 
 ### Information after successful search
 
@@ -125,15 +125,35 @@
 
 ---
 
+
 ## 7. Изменение аудитории по ID (change)
 
-### Parameters for change
+### Параметры для изменения
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
 | room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с building | - |
 | floor | Новый этаж | No | int | ≥ 1 | - |
-| building | Новый корпус | No | str | Если указан, комбинация (room_number,
+| building | Новый корпус | No | str | Если указан, комбинация (room_number, building) должна быть уникальной | - |
+| capacity | Новая вместимость | No | int | > 0 | - |
+| type_ids | Новые ID типов | No | array of int | - | - |
+| is_active | Новый статус активности | No | boolean | - | - |
+
+### Информация после успешного изменения
+
+| Parameter | Type |
+|-----------|---------|
+| id | int |
+| room_number | str |
+| floor | int |
+| building | str |
+| capacity | int |
+| is_active | boolean |
+| types | array of RoomTypeResponse |
+
+
+---
+
 ## ER‑диаграмма (Mermaid)
 
 ```mermaid
@@ -154,9 +174,15 @@ boolean is_active
 }
 
 ROOM_ROOM_TYPE {
-int room_id PK, FK
-int type_id PK, FK
+int room_id FK
+int type_id FK
+}
+    
+composite PK ROOM_ROOM_TYPE {
+room_id
+type_id
 }
 
 ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
 ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+
