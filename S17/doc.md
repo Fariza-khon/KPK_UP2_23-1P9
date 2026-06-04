@@ -9,7 +9,6 @@
 | id | ID типа аудитории | int |
 | type_name | Название типа | str |
 | is_active | Статус активности | boolean |
-
 ---
 
 ## 1. Создание типа аудитории (create)
@@ -93,6 +92,8 @@
 | id | int |
 | type_name | str |
 | is_active | boolean |
+| total | int | # Общее количество записей |
+| count | int | # Количество записей в текущей порции |
 
 ---
 
@@ -121,8 +122,9 @@
 | building | Корпус | str |
 | capacity | Вместимость | int |
 | is_active | Статус активности | boolean |
-| types | Типы аудитории | array of RoomTypeResponse |
+| types | Типы аудитории (агрегированный результат из ROOM_ROOM_TYPE) | array of RoomTypeResponse |
 
+---
 
 ## 7. Изменение аудитории по ID (change)
 
@@ -134,7 +136,7 @@
 | floor | Новый этаж | No | int | ≥ 1 | - |
 | building | Новый корпус | No | str | Если указан, комбинация (room_number, building) должна быть уникальной | - |
 | capacity | Новая вместимость | No | int | > 0 | - |
-| type_ids | Новые ID типов | No | array of int | - | - |
+| type_ids | Новые ID типов (заменяют существующие связи) | No | array of int | - | - |
 | is_active | Новый статус активности | No | boolean | - | - |
 
 ### Information after successful change
@@ -148,6 +150,7 @@
 | capacity | int |
 | is_active | boolean |
 | types | array of RoomTypeResponse |
+
 
 ---
 ## ER‑диаграмма (Mermaid)
@@ -176,3 +179,7 @@ erDiagram
 
     ROOM ||--o{ ROOM_ROOM_TYPE : id → room_id
     ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id → type_id
+
+
+
+
