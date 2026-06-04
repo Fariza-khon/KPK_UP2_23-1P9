@@ -138,7 +138,7 @@
 
 ---
 ## ER‑диаграмма (Mermaid)
-
+```mermaid
 erDiagram
     ROOM_TYPE {
         int id PK
