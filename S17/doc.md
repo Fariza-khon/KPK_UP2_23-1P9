@@ -172,12 +172,12 @@ erDiagram
     }
 
     ROOM_ROOM_TYPE {
-        int room_id PK "Первичный ключ, внешний ключ к ROOM(id)"
-        int type_id PK "Первичный ключ, внешний ключ к ROOM_TYPE(id)"
+        int room_id FK 
+        int type_id FK 
     }
 
-    ROOM ||--o{ ROOM_ROOM_TYPE : "id → room_id"
-    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : "id → type_id"
+    ROOM ||--o{ ROOM_ROOM_TYPE : "room_id → idroom_id"
+    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : "type_id → type_id"
 
 
   
