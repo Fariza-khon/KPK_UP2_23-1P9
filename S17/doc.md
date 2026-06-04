@@ -37,18 +37,26 @@
 ### Parameters for change
 
 | Parameter | Description | Required | Type | Constraint | Default |
-|-----------|---------------------|-----------|---------|--------------------------------------|----------|
-| type_name | Новое название типа | No | str | Уникальное значение, min length 1, max length 50 | - |
-
-**Unique combination:** `type_name` (должен оставаться уникальным после изменения).
+|-----------|-----------|-----------|---------|-----------|-----------|
+| room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с `building` | — |
+| floor | Новый этаж | No | int | ≥ 1 | — |
+| building | Новый корпус | No | str | Если указан `room_number`, комбинация `(room_number, building)` должна быть уникальной | — |
+| capacity | Новая вместимость | No | int | > 0 | — |
+| type_ids | Новый список ID типов аудитории | No | array of int | — | `[]` |
+| is_active | Новый статус активности | No | boolean | — | — |
 
 ### Information after successful change
 
-| Parameter | Type |
-|-----------|---------|
-| id | int |
-| type_name | str |
-| is_active | boolean |
+| Parameter | Description | Type |
+|-----------|-----------|---------|
+| id | ID аудитории | int |
+| room_number | Номер аудитории | str |
+| floor | Этаж | int |
+| building | Корпус | str |
+| capacity | Вместимость | int |
+| is_active | Статус активности | boolean |
+| types | Типы аудитории | array of RoomTypeResponse |
+
 
 ---
 
@@ -141,31 +149,28 @@
 
 ```mermaid
 erDiagram
-ROOM_TYPE {
-int id PK
-string type_name
-boolean is_active
-}
+    ROOM_TYPE {
+        int id PK
+        string type_name
+        boolean is_active
+    }
 
-ROOM {
-int id PK
-string room_number
-string building
-int floor
-int capacity
-boolean is_active
-}
+    ROOM {
+        int id PK
+        string room_number
+        string building
+        int floor
+        int capacity
+        boolean is_active
+    }
 
-{ ROOM } {
-UNIQUE (room_number, building)
-}
+    ROOM_ROOM_TYPE {
+        int room_id PK, FK "Ссылка на ROOM(id)"
+        int type_id PK, FK "Ссылка на ROOM_TYPE(id)"
+    }
 
-ROOM_ROOM_TYPE {
-int room_id PK, FK
-int type_id PK, FK
-}
+    ROOM ||--o{ ROOM_ROOM_TYPE : "содержит типы"
+    ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : "является типом для"
 
-ROOM ||--o{ ROOM_ROOM_TYPE : id .. room_id
-ROOM_TYPE ||--o{ ROOM_ROOM_TYPE : id .. type_id
 
   
