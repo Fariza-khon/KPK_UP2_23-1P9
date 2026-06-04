@@ -8,13 +8,13 @@
 |-----------|-------------|---------|
 | id | ID типа аудитории | int |
 | type_name | Название типа | str |
-| is_active | Статус активности (при мягком удалении = False) | boolean |
+| is_active | Статус активности | boolean |
 
 ---
 
 ## 1. Создание типа аудитории (create)
 
-### Параметры для создания
+### Parameters for creation
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------|-----------|---------|--------------------------------------|----------|
@@ -22,7 +22,7 @@
 
 **Unique combination:** `type_name` (должен быть уникальным).
 
-### Информация после успешного создания
+### Information after successful creation
 
 | Parameter | Type |
 |-----------|---------|
@@ -34,7 +34,7 @@
 
 ## 2. Изменение типа аудитории по ID (change)
 
-### Параметры для изменения
+### Parameters for change
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|---------------------|-----------|---------|--------------------------------------|----------|
@@ -42,7 +42,7 @@
 
 **Unique combination:** `type_name` (должен оставаться уникальным после изменения).
 
-### Информация после успешного изменения
+### Information after successful change
 
 | Parameter | Type |
 |-----------|---------|
@@ -54,34 +54,39 @@
 
 ## 3. Удаление типа аудитории по ID (delete)
 
-* Реализуется **мягкое удаление** — поле `is_active` устанавливается в `False`.
-* Возвращает **True**, если тип аудитории был успешно помечен как удалённый (is_active = False).
-* Возвращает **False** в противном случае (например, если запись не найдена).
+### Return Value
+
+| Parameter | Type |
+|-----------|---------|
+| result | boolean |
+
+* **True** — тип аудитории успешно помечен как удалённый
+* **False** — запись не найдена или произошла ошибка
 
 ---
 
 ## 4. Получение типа аудитории по ID (get)
 
-### Информация после успешного поиска
+### Information after successful search
 
 | Parameter | Description | Type |
 |-----------|---------------------|---------|
 | id | ID типа аудитории | int |
 | type_name | Название типа | str |
-| is_active | Статус активности (при мягком удалении = False) | boolean |
+| is_active | Статус активности | boolean |
 
 ---
 
 ## 5. Получение списка типов аудитории (get list)
 
-### Параметры для поиска
+### Search parameters
 
 | Parameter | Description | Type |
 |-----------|----------------------------|---------|
 | type_name | Частичное совпадение названия | str |
 | limit | Лимит количества записей | int |
 
-### Информация после успешного поиска
+### Information after successful search
 
 | Parameter | Type |
 |-----------|---------|
@@ -93,7 +98,7 @@
 
 ## 6. Создание аудитории (create)
 
-### Параметры для создания
+### Parameters for creation
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
@@ -106,7 +111,7 @@
 
 **Unique combination:** `(room_number, building)` — должна быть уникальной.
 
-### Информация после успешного создания
+### Information after successful creation
 
 | Parameter | Description | Type |
 |-----------|-------------------------|---------|
@@ -122,13 +127,14 @@
 
 ## 7. Изменение аудитории по ID (change)
 
-### Параметры для изменения
+### Parameters for change
 
 | Parameter | Description | Required | Type | Constraint | Default |
 |-----------|-------------------------|-----------|---------|------------------------------|----------|
-| room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с `building` | - |
+| room_number | Новый номер аудитории | No | str | Если указан, должен быть уникальным в комбинации с building | - |
 | floor | Новый этаж | No | int | ≥ 1 | - |
-| building | Новый корпус | No
+| building | Новый корпус | No | str | Если указан, комбинация (room_number, building) должна быть уникальной | - |
+| capacity | Новая вместимость | No | int |
 
 
 ## ER‑диаграмма (Mermaid)
